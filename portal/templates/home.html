@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Главная — Design.pro{% endblock %}
+
+{% block content %}
+    <h2>Добро пожаловать в студию дизайна интерьеров «Design.pro»</h2>
+    <p>Мы создаём красивые и удобные пространства для жизни.</p>
+
+    {% if user.is_authenticated %}
+        <p>Привет, <strong>{{ user.username }}!</strong> Вы успешно вошли в систему.</p>
+    {% else %}
+        <p><a href="/login/">Войдите</a> или <a href="/register/">зарегистрируйтесь</a>, чтобы оставить заявку на дизайн.</p>
+    {% endif %}
+{% endblock %}

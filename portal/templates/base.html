@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Design.pro{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1><a href="/">Design.pro</a></h1>
+    </header>
+
+    <nav>
+        <a href="/">Главная</a>
+        {% if user.is_authenticated %}
+            <a href="/logout/">Выход</a>
+        {% else %}
+            <a href="/login/">Вход</a>
+            <a href="/register/">Регистрация</a>
+        {% endif %}
+    </nav>
+
+    <main>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

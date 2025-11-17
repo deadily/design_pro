@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Регистрация</h2>
+<form method="post">
+    {% csrf_token %}
+    <p><label>ФИО: <input type="text" name="full_name" required></label></p>
+    <p><label>Логин: <input type="text" name="username" required></label></p>
+    <p><label>Email: <input type="email" name="email" required></label></p>
+    <p><label>Пароль: <input type="password" name="password" required></label></p>
+    <p><label>Повтор пароля: <input type="password" name="confirm_password" required></label></p>
+    <p><label><input type="checkbox" name="agree" required> Согласие на обработку данных</label></p>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+{% endblock %}
