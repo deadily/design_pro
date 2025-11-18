@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Удалить заявку? — Design.pro{% endblock %}
+
+
+{% block content %}
+    <h2>Подтвердите удаление</h2>
+    <p>Вы действительно хотите удалить заявку:</p>
+    <strong>{{ req.title }}</strong>?
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, удалить</button>
+    </form>
+
+    <p><a href="/user/requests/">← Отмена</a></p>
+{% endblock %}

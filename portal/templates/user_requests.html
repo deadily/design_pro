@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Мои заявки — Design.pro{% endblock %}
+
+
+{% block content %}
+    <h2>Мои заявки</h2>
+    <a href="/user/request/create/">Создать новую заявку</a>
+
+    {% if requests %}
+        <table>
+            <tr>
+                <th>Дата</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Статус</th>
+                <th>Фото</th>
+                <th>Действия</th>
+            </tr>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.created_at|date:"d.m.Y" }}</td>
+                <td>{{ req.title }}</td>
+                <td>{{ req.description|truncatewords:10 }}</td>
+                <td>{{ req.get_status_display }}</td>
+                <td><a href="{{ req.photo.url }}" target="_blank">Просмотр</a></td>
+                <td>
+                    {% if req.status == 'new' %}
+                        <a href="/user/request/delete/{{ req.id }}/" onclick="return confirm('Удалить заявку?')">Удалить</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>У вас пока нет заявок.</p>
+    {% endif %}
+{% endblock %}

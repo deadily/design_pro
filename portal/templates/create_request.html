@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}Создать заявку — Design.pro{% endblock %}
+
+{% block content %}
+    <h2>Создать заявку на дизайн интерьера</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label>{{ form.title.label }}:<br>
+                {{ form.title }}
+            </label>
+        </p>
+        <p>
+            <label>{{ form.description.label }}:<br>
+                {{ form.description }}
+            </label>
+        </p>
+        <p>
+            <label>{{ form.photo.label }}:<br>
+                {{ form.photo }}
+            </label>
+        </p>
+        <button type="submit">Отправить заявку</button>
+    </form>
+    <p><a href="/user/requests/">← Назад к заявкам</a></p>
+{% endblock %}
