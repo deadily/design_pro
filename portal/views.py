@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -108,6 +110,13 @@ def create_request(request):
         if form.is_valid():
             req = form.save(commit=False)
             req.user = request.user
+            formats = ['.png', '.jpg', '.jpeg']
+            format_to_check = os.path.splitext(req.photo.name)[1].lower()
+            if format_to_check not in formats:
+                messages.error(request, 'Файл не подходит по формату.')
+                return render(request, 'create_request.html', {'form': form})
+
+
             if req.photo.size > 2 * 1024 * 1024:
                 messages.error(request, 'Файл слишком большой (более 2 Мб).')
             else:
