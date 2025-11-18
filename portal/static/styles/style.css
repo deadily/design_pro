@@ -1,12 +1,14 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
     color: #000000;
+    line-height: 1.6;
 }
 
 header {
@@ -21,13 +23,9 @@ header a {
     text-decoration: none;
 }
 
-header a:hover {
-    text-decoration: underline;
-}
-
 nav {
     background-color: #f0f0f0;
-    padding: 16px;
+    padding: 13px;
     border-bottom: 1px solid #000000;
 }
 
@@ -40,14 +38,14 @@ nav a {
 
 main {
     max-width: 800px;
-    margin: 32px;
+    margin: 32px auto;
     padding: 0 16px;
 }
 
 h1, h2 {
     border-bottom: 1px solid #000000;
     padding-bottom: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 }
 
 h1 {
@@ -56,6 +54,14 @@ h1 {
 
 h2 {
     font-size: 24px;
+}
+
+ul {
+    background-color: #f9f9f9;
+    border: 1px solid #000000;
+    padding: 16px;
+    list-style: disc;
+    margin: 16px 0;
 }
 
 form {
@@ -74,7 +80,8 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="file"] {
     width: 100%;
     padding: 10px;
     margin-top: 6px;
@@ -94,10 +101,26 @@ button {
     font-size: 14px;
 }
 
-ul {
-    background-color: #f9f9f9;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+th {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
     border: 1px solid #000000;
-    padding: 16px;
-    list-style: disc;
-    margin: 16px 0;
+}
+
+td {
+    padding: 10px 12px;
+    border: 1px solid #000000;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
 }

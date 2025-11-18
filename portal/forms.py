@@ -32,3 +32,18 @@ class RegisterForm(forms.Form):
         if not all(c.isalpha() or c in ' -' for c in full_name):
             raise forms.ValidationError("ФИО — только кириллица, пробелы и дефис.")
         return full_name
+
+from .models import Request
+
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = ['title', 'description', 'photo']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }
+        labels = {
+            'title': 'Название',
+            'description': 'Описание',
+            'photo': 'Фото или план помещения (JPG, PNG, до 2 Мб)',
+        }
