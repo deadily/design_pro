@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Смена статуса — Design.pro{% endblock %}
+
+{% block content %}
+    <h2>Изменение статуса заявки</h2>
+
+    <p><strong>Заявка:</strong> {{ request.title }}</p>
+    <p><strong>Текущий статус:</strong> {{ request.get_status_display }}</p>
+    <p><strong>Пользователь:</strong> {{ request.user.username }}</p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div>
+            <label>{{ form.status.label }}:</label><br>
+            {{ form.status }}
+            {% if form.status.errors %}
+                <div>{{ form.status.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 16px;">
+            <label>{{ form.comment.label }}:</label><br>
+            {{ form.comment }}
+            {% if form.comment.errors %}
+                <div>{{ form.comment.errors }}</div>
+            {% endif %}
+        </div>
+
+
+        <div style="margin-top: 16px;">
+            <label>{{ form.design_image.label }}:</label><br>
+            {{ form.design_image }}
+            {% if form.design_image.errors %}
+                <div>{{ form.design_image.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 24px;">
+            <button type="submit">Обновить статус</button>
+        </div>
+    </form>
+{% endblock %}
