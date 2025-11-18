@@ -26,7 +26,7 @@
                 <td><a href="{{ req.photo.url }}" target="_blank">Просмотр</a></td>
                 <td>
                     {% if req.status == 'new' %}
-                        <a href="/user/request/delete/{{ req.id }}/" onclick="return confirm('Удалить заявку?')">Удалить</a>
+                        <a href="/user/request/delete/{{ req.id }}/">Удалить</a>
                     {% else %}
                         —
                     {% endif %}
