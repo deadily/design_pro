@@ -2,7 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Request
+from .models import Request, Category
 
 
 class RegisterForm(forms.Form):
@@ -20,6 +20,9 @@ class RegisterForm(forms.Form):
 
         if password != confirm_password:
             raise forms.ValidationError("Пароли не совпадают.")
+
+        if len(password) < 6:
+            raise forms.ValidationError("Пароль должен быть не менее 6 символов.")
 
         return cleaned_data
 
@@ -48,15 +51,62 @@ class RegisterForm(forms.Form):
 
         return full_name
 
+
 class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
-        fields = ['title', 'description', 'photo']
+        fields = ['title', 'description', 'category', 'photo']  # Добавлено 'category'
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
         labels = {
             'title': 'Название',
             'description': 'Описание',
+            'category': 'Категория',
             'photo': 'Фото или план помещения (JPG, JPEG, PNG, до 2 Мб)',
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.all().order_by('name')
+        self.fields['category'].empty_label = "Выберите категорию"
+        self.fields['category'].required = True
+
+
+
+class AdminStatusForm(forms.Form):
+    status = forms.ChoiceField(
+        choices=[('in_progress', 'Принято в работу'), ('done', 'Выполнено')],
+        label="Новый статус"
+    )
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label="Комментарий",
+        required=False
+    )
+    design_image = forms.ImageField(
+        required=False,
+        label="Дизайн (для статуса 'Выполнено')"
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        comment = cleaned_data.get('comment')
+        design_image = cleaned_data.get('design_image')
+
+        if status == 'in_progress':
+            if not comment or not comment.strip():
+                self.add_error('comment', 'Комментарий обязателен при переводе в статус "Принято в работу".')
+
+        if status == 'done':
+            if not design_image:
+                self.add_error('design_image', 'Для статуса "Выполнено" обязательно прикрепить изображение дизайна.')
+
+        return cleaned_data
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        labels = {'name': 'Название категории'}

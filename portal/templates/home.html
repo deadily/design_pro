@@ -11,4 +11,43 @@
     {% else %}
         <p><a href="/login/">Войдите</a> или <a href="/register/">зарегистрируйтесь</a>, чтобы оставить заявку на дизайн.</p>
     {% endif %}
+
+
+    <div style="margin: 24px 0; padding: 10px; background-color: #f5f5f5; border-left: 4px solid #000;">
+        <strong>Заявок в работе:</strong> {{ in_progress_count }}
+    </div>
+
+
+    <h3>Последние выполненные проекты</h3>
+
+    {% if completed_requests %}
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Дата</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Название</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Категория</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Фото</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in completed_requests %}
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{{ req.created_at|date:"d.m.Y" }}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{{ req.title }}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">{{ req.category.name|default:"—" }}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">
+                        {% if req.photo %}
+                            <img src="{{ req.design_image.url }}"style="max-width: 150px; height: auto;">
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Пока нет завершённых проектов.</p>
+    {% endif %}
 {% endblock %}

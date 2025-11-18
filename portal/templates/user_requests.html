@@ -2,37 +2,83 @@
 
 {% block title %}Мои заявки — Design.pro{% endblock %}
 
-
 {% block content %}
     <h2>Мои заявки</h2>
     <a href="/user/request/create/">Создать новую заявку</a>
 
+
+     <form method="get">
+        <label for="status_filter">Фильтр по статусу:</label>
+        <select name="status" id="status_filter">
+            <option value="">Все статусы</option>
+            <option value="new" {% if current_status == 'new' %}selected{% endif %}>Новая</option>
+            <option value="in_progress" {% if current_status == 'in_progress' %}selected{% endif %}>Принято в работу</option>
+            <option value="done" {% if current_status == 'done' %}selected{% endif %}>Выполнено</option>
+        </select>
+        <button type="submit">Применить</button>
+        {% if current_status %}
+            <a href="{% url 'user_requests' %}">Сбросить фильтр</a>
+        {% endif %}
+    </form>
+
     {% if requests %}
         <table>
-            <tr>
-                <th>Дата</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Статус</th>
-                <th>Фото</th>
-                <th>Действия</th>
-            </tr>
-            {% for req in requests %}
-            <tr>
-                <td>{{ req.created_at|date:"d.m.Y" }}</td>
-                <td>{{ req.title }}</td>
-                <td>{{ req.description}}</td>
-                <td>{{ req.get_status_display }}</td>
-                <td><img style="width: 150px" src="{{ req.photo.url }}"></td>
-                <td>
-                    {% if req.status == 'new' %}
-                        <a href="/user/request/delete/{{ req.id }}/">Удалить</a>
-                    {% else %}
-                        —
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Категория</th>
+                    <th>Статус</th>
+                    <th>Фото</th>
+                    <th>Ответ администратора</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.created_at|date:"d.m.Y" }}</td>
+                    <td>{{ req.title }}</td>
+                    <td>{{ req.description|linebreaksbr|truncatewords:20 }}</td>
+                    <td>{{ req.category.name|default:"—" }}</td>
+                    <td>{{ req.get_status_display }}</td>
+                    <td>
+                        {% if req.photo %}
+                            <img src="{{ req.photo.url }}" alt="Фото помещения" style="max-width: 150px; height: auto;">
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if req.comment %}
+                            <div style="margin-bottom: 8px; font-style: italic;">
+                                {{ req.comment|linebreaksbr }}
+                            </div>
+                        {% endif %}
+
+                        {% if req.status == 'done' %}
+                            {% if req.design_image %}
+                                <img src="{{ req.design_image.url }}" style="max-width: 120px; height: auto; display: block; margin-top: 8px;">
+                            {% else %}
+                                <em>Дизайн не прикреплён</em>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if not req.comment and req.status != 'done' %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if req.status == 'new' %}
+                            <a href="{% url 'delete_request' req.id %}">Удалить</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% else %}
         <p>У вас пока нет заявок.</p>
