@@ -58,5 +58,5 @@ class RequestForm(forms.ModelForm):
         labels = {
             'title': 'Название',
             'description': 'Описание',
-            'photo': 'Фото или план помещения (JPG, PNG, до 2 Мб)',
+            'photo': 'Фото или план помещения (JPG, JPEG, PNG, до 2 Мб)',
         }
