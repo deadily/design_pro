@@ -1,3 +1,4 @@
+import os
 import re
 from django import forms
 from django.contrib.auth.models import User
@@ -55,7 +56,7 @@ class RegisterForm(forms.Form):
 class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
-        fields = ['title', 'description', 'category', 'photo']  # Добавлено 'category'
+        fields = ['title', 'description', 'category', 'photo']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
@@ -72,6 +73,19 @@ class RequestForm(forms.ModelForm):
         self.fields['category'].empty_label = "Выберите категорию"
         self.fields['category'].required = True
 
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if not photo:
+            raise forms.ValidationError('Файл обязателен.')
+
+        ext = os.path.splitext(photo.name)[1].lower()
+        if ext not in ['.jpg', '.jpeg', '.png']:
+            raise forms.ValidationError('Разрешены только JPG, JPEG, PNG.')
+
+        if photo.size > 2 * 1024 * 1024:
+            raise forms.ValidationError('Файл не должен превышать 2 МБ.')
+
+        return photo
 
 
 class AdminStatusForm(forms.Form):

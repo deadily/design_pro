@@ -9,16 +9,26 @@
         <p>
             <label>{{ form.title.label }}:<br>
                 {{ form.title }}
+                {% if form.title.errors %}<div style="color:red;">{{ form.title.errors }}</div>{% endif %}
             </label>
         </p>
         <p>
             <label>{{ form.description.label }}:<br>
                 {{ form.description }}
+                 {% if form.description.errors %}<div style="color:red;">{{ form.description.errors }}</div>{% endif %}
             </label>
         </p>
         <p>
             <label>{{ form.category.label }}:<br>
                 {{ form.category }}
+                {% if form.category.errors %}<div style="color:red;">{{ form.category.errors }}</div>{% endif %}
+                {% if form.photo.errors %}
+                    <div style="color:red;">
+                        {% for error in form.photo.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </label>
         </p>
         <p>
@@ -28,12 +38,5 @@
         </p>
         <button type="submit">Отправить заявку</button>
     </form>
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <p style="color: green;">{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
     <p><a href="/user/requests/">← Назад к заявкам</a></p>
 {% endblock %}

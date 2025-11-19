@@ -125,29 +125,13 @@ def create_request(request):
         if form.is_valid():
             req = form.save(commit=False)
             req.user = request.user
-            req.edit_date = timezone.now()
             req.save()
-            formats = ['.png', '.jpg', '.jpeg']
-            format_to_check = os.path.splitext(req.photo.name)[1].lower()
-            if format_to_check not in formats:
-                messages.error(request, 'Файл не подходит по формату.')
-                return render(request, 'create_request.html', {'form': form})
-
-            if req.photo.size > 2 * 1024 * 1024:
-                messages.error(request, 'Файл слишком большой (более 2 Мб).')
-            else:
-                req.save()
-                messages.success(request, 'Заявка успешно создана!')
-                return redirect('user_requests')
-        else:
-            for field in form.errors:
-                for error in form.errors[field]:
-                    messages.error(request, f"{field}: {error}")
+            messages.success(request, 'Заявка успешно создана!')
+            return redirect('user_requests')
     else:
         form = RequestForm()
 
     return render(request, 'create_request.html', {'form': form})
-
 
 @login_required
 def delete_request(request, req_id):

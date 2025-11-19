@@ -15,6 +15,7 @@
                     <th>Название</th>
                     <th>Категория</th>
                     <th>Статус</th>
+                    <th>Дизайн</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -25,6 +26,13 @@
                     <td>{{ req.title }}</td>
                     <td>{{ req.category.name|default:"—" }}</td>
                     <td>{{ req.get_status_display }}</td>
+                    <td>
+                        {% if req.status == 'done' and req.design_image %}
+                            <img src="{{ req.design_image.url }}" alt="Дизайн" style="max-width: 100px; height: auto;">
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
                     <td>
                         {% if req.status == 'new' or req.status == 'in_progress' %}
                         <a href="{% url 'change_status' req.id %}">Сменить статус</a>
@@ -45,7 +53,7 @@
     <h3>Управление категориями</h3>
 
     {% if categories %}
-        <ul>
+        <ul style="list-style: none;">
             {% for cat in categories %}
             <li>
                 {{ cat.name }}
